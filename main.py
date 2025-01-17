@@ -45,25 +45,43 @@ models = {
 if any(model is None for model in models.values()):
     raise RuntimeError("One or more models failed to load. Check file paths.")
 
+@app.get("/")
+async def root():
+    return {"message": "Welcome to the Medical Image Diagnosis API! Use POST to send image data."}
+
 @app.post("/")
 async def diagnose(model: str = Form(...), image: UploadFile = None):
-    if model not in models:
-        return JSONResponse({"error": "Invalid model selected"}, status_code=400)
-
-    if not image:
-        return JSONResponse({"error": "No image provided"}, status_code=400)
-
     try:
+        if model not in models:
+            return JSONResponse({"error": "Invalid model selected"}, status_code=400)
+
+        if not image:
+            return JSONResponse({"error": "No image provided"}, status_code=400)
+
+        # Log model and image info
+        print(f"Selected model: {model}")
+        print(f"Uploaded file: {image.filename}")
+
         # Preprocess the image
         image_data = Image.open(io.BytesIO(await image.read()))
-        image_data = image_data.convert("RGB").resize((224, 224))  # Convert to RGB and resize
-        image_array = np.array(image_data) / 255.0  # Normalize pixel values
-        image_array = np.expand_dims(image_array, axis=0)  # Add batch dimension
+        image_data = image_data.convert("RGB").resize((224, 224))
+        print("Image preprocessing successful.")
+
+        # Convert image to array
+        image_array = np.array(image_data) / 255.0
+        image_array = np.expand_dims(image_array, axis=0)
+        print("Image converted to array.")
 
         # Perform inference
         selected_model = models[model]
-        prediction = selected_model.predict(image_array)
+        prediction = selected_model.predict(image_array)  # Adjust if your model uses a different API
+        print(f"Model prediction: {prediction}")
+
+        # Determine diagnosis
         diagnosis = "Positive" if prediction[0] == 1 else "Negative"
         return {"diagnosis": diagnosis}
+
     except Exception as e:
+        print(f"Error during diagnosis: {str(e)}")  # Log full error details
         return JSONResponse({"error": f"Processing error: {str(e)}"}, status_code=500)
+
