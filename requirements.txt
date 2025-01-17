@@ -9,6 +9,7 @@ scikit-learn
 pandas
 matplotlib
 seaborn
+python-multipart
 
 # Kaggle API and utility tools
 kaggle
