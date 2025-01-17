@@ -1,5 +1,20 @@
+# Core libraries
 fastapi
 uvicorn
 pillow
 numpy
 scikit-learn
+
+# Data handling and visualization
+pandas
+matplotlib
+seaborn
+
+# Kaggle API and utility tools
+kaggle
+kagglehub
+
+# PyTorch and TorchVision for deep learning
+torch
+torchvision
+torchaudio
