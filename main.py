@@ -12,8 +12,13 @@ app = FastAPI()
 def load_model(filepath):
     try:
         print(f"Attempting to load model: {filepath}")
-        with open(filepath, "rb") as file:
-            return pickle.load(file)
+        if filepath.endswith(".pkl"):
+            return pickle.load(open(filepath, "rb"))
+        elif filepath.endswith(".pt") or filepath.endswith(".pth"):
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+            return torch.load(filepath, map_location=device)
+        else:
+            raise ValueError("Unsupported model format.")
     except Exception as e:
         print(f"Error loading model {filepath}: {str(e)}")
         return None
