@@ -13,15 +13,17 @@ def load_model(filepath):
     try:
         print(f"Attempting to load model: {filepath}")
         if filepath.endswith(".pkl"):
+            # For CPU-only deployment, no CUDA-related deserialization
             return pickle.load(open(filepath, "rb"))
         elif filepath.endswith(".pt") or filepath.endswith(".pth"):
-            device = "cuda" if torch.cuda.is_available() else "cpu"
-            return torch.load(filepath, map_location=device)
+            # Explicitly map to CPU
+            return torch.load(filepath, map_location=torch.device('cpu'))
         else:
             raise ValueError("Unsupported model format.")
     except Exception as e:
         print(f"Error loading model {filepath}: {str(e)}")
         return None
+
 
 models = {
     "brain": load_model("Brain_Tumor_Detectionr_model.pkl"),
