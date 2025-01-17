@@ -27,8 +27,8 @@ def load_model(filepath):
 
 models = {
     "brain": load_model("Brain_Tumor_Detectionr_model.pkl"),
-    #"tb": load_model("tb_detector_model.pkl"),
-    #"pneumonia": load_model("chest-xray-pneumonia_detector_model.pkl")
+    "tb": load_model("tb_detector_model.pkl"),
+    "pneumonia": load_model("chest-xray-pneumonia_detector_model.pkl")
 }
 
 # Validate that all models loaded successfully
