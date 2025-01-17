@@ -7,6 +7,7 @@ WORKDIR /app
 COPY . /app
 
 # Install dependencies
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose the port for the application
