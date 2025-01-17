@@ -11,6 +11,7 @@ app = FastAPI()
 # Load the models
 def load_model(filepath):
     try:
+        print(f"Attempting to load model: {filepath}")
         with open(filepath, "rb") as file:
             return pickle.load(file)
     except Exception as e:
