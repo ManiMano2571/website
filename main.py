@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile, Form
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
 from PIL import Image
 import io
 import pickle
@@ -7,6 +8,15 @@ import numpy as np
 
 # Initialize the FastAPI app
 app = FastAPI()
+
+# Add CORS middleware to allow all origins (or restrict as necessary)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins; modify for tighter security if necessary
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Load the models
 def load_model(filepath):
